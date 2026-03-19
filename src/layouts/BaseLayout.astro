@@ -1,0 +1,110 @@
+---
+import Head from "@astrojs/partytown";
+import "../styles/global.css";
+import "../styles/header.css";
+import "../styles/hero.css";
+import "../styles/section-image-text.css";
+import "../styles/gallery.css";
+import "../styles/map-section.css";
+import "../styles/footer.css";
+import "../styles/nearbyRestaurants.css";
+import "../styles/cursor-light.css";
+import "../styles/events.css";
+import "../styles/experiences.css";
+import "../styles/floating-cta.css";
+import FloatingCTA from "../components/FloatingCTA.astro";
+---
+<!doctype html>
+<html lang="es">
+	<head>
+		<meta charset="utf-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<slot name="head">
+			<title>House Page</title>
+		</slot>
+	<!-- styles imported via Astro/Vite in the frontmatter -->
+		<link rel="icon" href="/icon.ico" />
+	</head>
+	<body>
+		<div class="baseLight"></div>
+		<div id="site-root" class="page-enter">
+			<slot />
+		</div>
+		<FloatingCTA />
+
+		<script>
+		(function(){
+			if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+			document.addEventListener('click', function(e){
+				const a = e.target.closest && e.target.closest('a');
+				if (!a) return;
+				const href = a.getAttribute('href');
+				if (!href || href.startsWith('#') || href.startsWith('mailto:') || a.target === '_blank') return;
+				e.preventDefault();
+				const root = document.getElementById('site-root');
+				root.classList.remove('page-enter');
+				root.classList.add('page-exit');
+				setTimeout(()=> window.location = href, 300);
+			}, true);
+
+					const io = new IntersectionObserver((entries)=>{
+						entries.forEach((entry)=>{
+							if (entry.isIntersecting){
+								const el = entry.target;
+								// If element has data-i, set delay accordingly
+								const index = el.dataset.i ? Number(el.dataset.i) : null;
+								if (index !== null) {
+									el.style.setProperty('--delay', `calc(var(--stagger-step) * ${index})`);
+								}
+
+								if (el.classList.contains('stagger')){
+									Array.from(el.children).forEach((child, idx)=>{
+										child.style.setProperty('--i', idx);
+										child.style.setProperty('--delay', `calc(var(--stagger-step) * ${idx})`);
+										child.classList.add('enter');
+									});
+								}
+
+								el.classList.add('enter');
+								if (el.dataset.once !== 'false') io.unobserve(el);
+							}
+						});
+					},{threshold:0.12});
+
+							document.addEventListener('DOMContentLoaded', ()=>{
+								// Observe the usual elements
+							document.querySelectorAll('.animate-on-scroll, .reveal, .stagger').forEach((el)=>io.observe(el));
+
+								// Header show on scroll
+								const header = document.querySelector('.site-header');
+								if (header){
+									// Show header always on non-root pages; only on the root page keep the scroll show/hide behavior
+									const isRoot = (window && window.location && (window.location.pathname === '/' || window.location.pathname === '' || window.location.pathname === '/index'));
+									if (!isRoot){
+										header.classList.add('visible');
+									} else {
+										let lastScroll = window.scrollY;
+										const threshold = 60;
+										const check = ()=>{
+											const y = window.scrollY;
+											if (y > threshold) header.classList.add('visible');
+											else header.classList.remove('visible');
+											lastScroll = y;
+										};
+										// Init state
+										check();
+										window.addEventListener('scroll', () => check());
+									}
+								}
+							});
+		})();
+		
+		// Cursor light effect - sigue el mouse
+		window.addEventListener('mousemove', (e) => {
+			document.body.style.setProperty('--mx', e.clientX - (window.innerWidth / 2));
+			document.body.style.setProperty('--my', e.clientY - (window.innerHeight / 2));
+		});
+		</script>
+	</body>
+</html>

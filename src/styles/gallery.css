@@ -1,0 +1,257 @@
+/* Gallery and photo-collage styles */
+.gallery.section .container.gallery-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1rem;
+  grid-auto-rows: 200px;
+}
+
+@media (max-width: 1100px) {
+  .gallery-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+@media (max-width: 700px) {
+  .gallery-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 420px) {
+  .gallery-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.gallery-item {
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  border-radius: 10px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(34, 34, 42, 0.08);
+  transition:
+    transform 0.35s var(--transition-ease),
+    box-shadow 0.35s var(--transition-ease);
+}
+.gallery-item:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 18px 48px rgba(2, 6, 23, 0.55);
+}
+
+/* --- Quitar padding global solo en la sección de fotos --- */
+/* coincide con: <section class="section photo-section"> */
+.section.photo-section {
+  padding: 0 !important;
+}
+
+.section.video-section {
+  padding: 0 !important;
+}
+
+/* --- Añadir padding-top solo al título / bloque de texto de la fotogalería --- */
+/* en tu media.astro el título es <h2 class="map-title">Fotogalería</h2> */
+.photo-section .map-title {
+  display: block; /* asegurar comportamiento predecible */
+  padding-top: 5rem; /* espacio que separa del header (ajusta si hace falta) */
+  margin-bottom: 0.5rem; /* opcional: separar del párrafo descriptivo */
+}
+
+/* También mantener algo de separación para el párrafo descriptivo si lo quieres */
+.photo-section > .container p {
+  margin-top: 0.25rem;
+}
+
+.video-section .map-title {
+  display: block; /* asegurar comportamiento predecible */
+  margin-bottom: 0.5rem; /* opcional: separar del párrafo descriptivo */
+}
+
+/* --- Ajustes responsivos: reducir padding-top en pantallas pequeñas --- */
+@media (max-width: 900px) {
+  .photo-section .map-title {
+    padding-top: 3.25rem;
+  }
+  .video-section .map-title {
+    padding-top: 3.25rem;
+  }
+}
+@media (max-width: 480px) {
+  .photo-section .map-title {
+    padding-top: 2rem;
+  }
+  .video-section .map-title {
+    padding-top: 2rem;
+  }
+}
+
+/* photo collage (media page) */
+.photo-section .photo-collage,
+.photo-collage-bleed .photo-collage,
+.photo-collage {
+  display: grid;
+  --cell: 120px;
+  grid-template-columns: repeat(var(--cols, 4), var(--cell));
+  grid-auto-rows: var(--cell);
+  gap: 5px;
+  align-items: stretch;
+  margin: 0 auto;
+  padding: 0;
+  justify-content: center;
+}
+.photo-section .photo-collage figure {
+  margin: 0;
+  padding: 0;
+  line-height: 0;
+  overflow: hidden;
+}
+.photo-section .photo-collage img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center center;
+  border-radius: 10px;
+}
+.photo-section .photo-collage figure {
+  max-width: var(--cell);
+  max-height: var(--cell);
+}
+.photo-section .photo-collage figure.wide {
+  grid-column: span 2;
+}
+.photo-section .photo-collage figure.tall {
+  grid-row: span 2;
+}
+.photo-section .photo-collage figure.wide.tall {
+  grid-column: span 2;
+  grid-row: span 2;
+}
+.photo-section .photo-collage figure img {
+  box-shadow: 0 8px 20px rgba(2, 6, 23, 0.08);
+}
+
+
+
+/* Video carousel styles (used in media.astro) */
+.video-section .video-carousel {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.video-section .video-viewport {
+  width: 100%;
+  max-width: 1100px;
+}
+.video-slide {
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.video-slide.active {
+  display: flex;
+  gap: 1.5rem;
+  align-items: center;
+  justify-content: center;
+}
+.video-card {
+  background: var(--surface);
+  padding: 0.5rem;
+  border-radius: 10px;
+  box-shadow: 0 12px 36px rgba(2, 6, 23, 0.12);
+}
+.video-card video {
+  display: block;
+  width: 560px;
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+.video-desc {
+  max-width: 360px;
+}
+.carousel-btn {
+  background: transparent;
+  border: 0;
+  color: var(--text-color);
+  font-size: 2.25rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.25rem 0.5rem;
+}
+.carousel-btn:focus {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
+}
+
+@media (max-width: 900px) {
+  .video-slide.active {
+    flex-direction: column;
+  }
+  .video-desc {
+    max-width: 100%;
+  }
+}
+
+/* Separador rayado dorado entre fotogalería y videogalería - animación infinita */
+.section-divider {
+  padding: 4rem 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  overflow: hidden;
+  position: relative;
+}
+.dashed-line-gold {
+  width: calc(100% + 100px);
+  height: 20px;
+  background: repeating-linear-gradient(
+    90deg,
+    rgba(202, 175, 24, 0.6) 0px,
+    rgba(195, 169, 23, 0.6) 50px,
+    transparent 50px,
+    transparent 100px
+  );
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  animation: dashInfinite 3s linear infinite;
+}
+
+@keyframes dashInfinite {
+  0% {
+    transform: translateY(-50%) translateX(0);
+  }
+  100% {
+    transform: translateY(-50%) translateX(-100px);
+  }
+}
+
+/* Notificación de foto subida */
+.photo-notification {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%) scale(0.8);
+  background: var(--dark-bg);
+  color: var(--on-dark);
+  padding: 1.5rem 2.5rem;
+  border-radius: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+  z-index: 10000;
+  font-size: 1.125rem;
+  text-align: center;
+  opacity: 0;
+  transition:
+    opacity 0.3s var(--transition-ease),
+    transform 0.3s var(--transition-ease);
+  pointer-events: none;
+  border: 2px solid rgba(255, 215, 0, 0.3);
+}
+.photo-notification.show {
+  opacity: 1;
+  transform: translate(-50%, -50%) scale(1);
+  pointer-events: auto;
+}

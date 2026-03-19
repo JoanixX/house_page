@@ -1,0 +1,19 @@
+.restaurants-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:1.25rem}
+.restaurant-card{background:#F7F6E9;padding:1rem;border-radius:12px;box-shadow:0 8px 20px rgba(2,6,23,0.06);overflow:hidden}
+.restaurant-card-inner{display:flex;flex-direction:column;gap:.5rem}
+.restaurant-title{margin:0;font-family:'Playfair Display',serif;font-size:1.125rem;color:var(--text-color)}
+.restaurant-meta{display:flex;align-items:center;gap:.5rem}
+.rating-number{color:rgba(34,34,42,0.7);font-weight:600;font-size:0.95rem}
+.restaurant-desc{margin:0;color:var(--text-color);line-height:1.5}
+
+/* Stars: base gray text with an overlaying gold text clipped by width (partial fills) */
+.stars{position:relative;color:#E6E6E6;font-size:1rem;line-height:1;display:inline-block;letter-spacing:2px}
+.stars::before{content:'★★★★★';position:absolute;left:0;top:0;white-space:nowrap;overflow:hidden;width:var(--pct,0%);color:#D7BFA6}
+
+@media(max-width:700px){
+  .restaurants-grid{grid-template-columns:repeat(1,1fr)}
+}
+
+.text {
+  padding-bottom: 1.5rem !important;
+}

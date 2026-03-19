@@ -1,0 +1,15 @@
+---
+const { images = [] } = Astro.props;
+---
+
+<section id="gallery" class="gallery section">
+	<div class="container gallery-grid stagger">
+		{images.length ? (
+			images.map((src, i) => (
+				<figure class="gallery-item hover-lift" style={`background-image: url('${src}')`} data-i={i} />
+			))
+		) : (
+			<p>No hay imágenes aún.</p>
+		)}
+	</div>
+</section>

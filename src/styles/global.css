@@ -1,0 +1,81 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&family=Playfair+Display:wght@400;600;700&display=swap');
+
+:root{
+  --bg: #f5f5f4;
+  --surface: #ffffff;
+  --text-color: #22222a;
+  --cream: #efe7db;
+  --muted: #8b9096;
+  --accent: #d7bfa6;
+  --accent-2: #cbb7d0;
+  --container:1100px;
+
+  --transition-duration: 0.35s;
+  --transition-ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+  --enter-duration: 0.95s;
+  --stagger-step: 0.12s;
+
+  --shadow-subtle: 0 10px 30px rgba(2,6,23,0.45);
+  --shadow-focus: 0 14px 40px rgba(2,6,23,0.55);
+  --dark-bg: #0b1116;
+  --on-dark: #f7f6f3;
+  --on-dark-muted: rgba(247,246,243,0.85);
+}
+
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Inter, system-ui, Arial, sans-serif;background:var(--bg);color:var(--text-color);line-height:1.5;-webkit-font-smoothing:antialiased}
+.container{max-width:var(--container);margin:0 auto;padding:1rem}
+img{max-width:100%;height:auto;display:block}
+
+/* Buttons */
+.btn{display:inline-block;padding:.6rem 1rem;border-radius:8px;text-decoration:none;margin-right:.5rem;transition:transform 0.32s var(--transition-ease), box-shadow 0.32s var(--transition-ease), background-color 0.32s}
+.btn.primary{background:linear-gradient(90deg,var(--accent),var(--accent-2));color:#22222a;box-shadow:var(--shadow-subtle)}
+.btn.ghost{border:1px solid rgba(34,34,42,0.06);color:var(--text-color);background:transparent}
+.btn:hover{transform:translateY(-4px) scale(1.02);box-shadow:var(--shadow-focus)}
+
+/* Animations, reveal, stagger */
+@keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+.animate-on-scroll{opacity:0;transform:translateY(20px);transition:opacity var(--enter-duration) var(--transition-ease), transform var(--enter-duration) var(--transition-ease);will-change:transform,opacity}
+.animate-on-scroll.enter{opacity:1;transform:translateY(0)}
+.reveal{animation:fadeUp var(--enter-duration) var(--transition-ease) both;animation-delay:var(--delay,0s)}
+.stagger > * { --stagger-step: var(--stagger-step); }
+.stagger > * { opacity:0; transform:translateY(20px); }
+.stagger.enter > * { animation: fadeUp var(--enter-duration) var(--transition-ease) both; }
+.stagger.enter > * { animation-delay: calc(var(--stagger-step) * var(--i, 0)); }
+
+#site-root.page-enter{opacity:1;transition:opacity 0.35s var(--transition-ease)}
+#site-root.page-exit{opacity:0;transition:opacity 0.35s var(--transition-ease)}
+
+.hover-lift{transition:transform 0.35s var(--transition-ease), box-shadow 0.35s var(--transition-ease)}
+.hover-lift:hover{transform:translateY(-5px) scale(1.03);box-shadow:var(--shadow-focus)}
+
+@media (prefers-reduced-motion: reduce) {
+  :root{ --enter-duration: 0.001s; --transition-duration: 0.001s }
+  .animate-on-scroll, .reveal, .stagger > * { transition:none; animation:none; opacity:1; transform:none }
+}
+
+/* Generic responsive helpers */
+@media(max-width:900px){
+  .nav{display:none}
+  .menu-btn{display:block}
+}
+
+/* Responsive text sizes: reduce font size in smaller screens (max 6px reduction) */
+@media(max-width:768px){
+  body{font-size:calc(1rem - 2px)}
+  p{font-size:calc(1rem - 3px)}
+  h2{font-size:calc(1.5rem - 4px)}
+  h3{font-size:calc(1.25rem - 3px)}
+  h4{font-size:calc(1.125rem - 2px)}
+  h5{font-size:calc(1rem - 2px)}
+}
+
+@media(max-width:480px){
+  body{font-size:calc(1rem - 4px)}
+  p{font-size:calc(1rem - 5px)}
+  h2{font-size:calc(1.5rem - 6px)}
+  h3{font-size:calc(1.25rem - 5px)}
+  h4{font-size:calc(1.125rem - 4px)}
+  h5{font-size:calc(1rem - 4px)}
+}

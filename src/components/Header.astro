@@ -1,0 +1,62 @@
+---
+const { siteTitle = 'House Page' } = Astro.props;
+---
+<header class="site-header">
+	<div class="container header-inner">
+		<button class="menu-btn" aria-label="Abrir menú">
+			<span class="hamburger-line"></span>
+			<span class="hamburger-line"></span>
+			<span class="hamburger-line"></span>
+		</button>
+		<a class="brand reveal" style="--delay:0s" href="/">{siteTitle}</a>
+		<a class="header-logo" href="/" aria-label="Inicio">
+			<img src="/icon.ico" alt="logo" />
+		</a>
+		<nav class="nav stagger">
+			<a class="reveal hover-lift" style="--delay:0.06s" href="/media">Galería</a>
+			<a class="reveal hover-lift" style="--delay:0.12s" href="/info">Contacto</a>
+		</nav>
+		<div class="mobile-menu">
+			<div class="mobile-menu-content">
+				<a class="mobile-brand" href="/">{siteTitle}</a>
+				<nav class="mobile-nav">
+					<a class="mobile-menu-link" href="/media">Galería</a>
+					<a class="mobile-menu-link" href="/info">Contacto</a>
+				</nav>
+			</div>
+		</div>
+	</div>
+</header>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+	const menuBtn = document.querySelector('.menu-btn');
+	const mobileMenu = document.querySelector('.mobile-menu');
+	const siteHeader = document.querySelector('.site-header');
+	
+	if (menuBtn && mobileMenu) {
+		menuBtn.addEventListener('click', (e) => {
+			e.stopPropagation();
+			menuBtn.classList.toggle('active');
+			mobileMenu.classList.toggle('open');
+			siteHeader.classList.toggle('menu-open');
+		});
+		
+		document.addEventListener('click', (e) => {
+			if (!mobileMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+				menuBtn.classList.remove('active');
+				mobileMenu.classList.remove('open');
+				siteHeader.classList.remove('menu-open');
+			}
+		});
+		
+		mobileMenu.querySelectorAll('.mobile-menu-link').forEach(link => {
+			link.addEventListener('click', () => {
+				menuBtn.classList.remove('active');
+				mobileMenu.classList.remove('open');
+				siteHeader.classList.remove('menu-open');
+			});
+		});
+	}
+});
+</script>

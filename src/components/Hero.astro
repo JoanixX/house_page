@@ -1,0 +1,15 @@
+---
+const { title = 'Bienvenido a House Page', subtitle = '...', image = '/images/hero.jpg' } = Astro.props;
+---
+
+<section class="hero">
+	<div class="hero-overlay" style={`background-image: linear-gradient(180deg, rgba(245,245,244,0.35), rgba(255,255,255,0.2)), url('${image}')`} ></div>
+	<div class="container hero-content stagger" style="--i:0">
+		<h1 class="reveal" style="--delay:0s">{title}</h1>
+		<p class="lead reveal" style="--delay:0.12s">{subtitle}</p>
+		<p class="reveal" style="--delay:0.24s">
+			<a class="btn primary" href="/media">Ver alojamiento</a>
+			<a class="btn ghost" href="/info">Reservar</a>
+		</p>
+	</div>
+</section>

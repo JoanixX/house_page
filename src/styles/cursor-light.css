@@ -1,0 +1,26 @@
+/* Cursor light effect - dorado neón, siempre visible */
+:root {
+  --light-size: 100px;
+}
+
+.baseLight {
+  position: fixed;
+  inset: calc(50% - (var(--light-size) / 2));
+  background-image: 
+    radial-gradient(circle at center, rgb(26, 140, 185) 0%, rgba(0, 225, 255, 0.6) 20%, rgba(0, 255, 229, 0.4) 35%, rgba(0, 217, 255, 0.2) 50%, rgba(255, 215, 0, 0.1) 65%, transparent 80%),
+    radial-gradient(circle at center, rgba(255, 255, 255, 0.9) 0%, transparent 40%);
+  transform: translate(calc(var(--mx, 0) * 1px), calc(var(--my, 0) * 1px));
+  pointer-events: none;
+  z-index: 9999;
+  filter: blur(20px) brightness(1.2);
+  will-change: transform;
+  transition: transform 0.15s ease-out;
+  opacity: 1;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .baseLight {
+    transition: transform 0.3s ease-out;
+  }
+}
+

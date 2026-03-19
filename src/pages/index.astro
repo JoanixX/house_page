@@ -1,0 +1,63 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro'
+import Header from '../components/Header.astro'
+import Hero from '../components/Hero.astro'
+import SectionImageText from '../components/SectionImageText.astro'
+import MapSection from '../components/MapSection.astro'
+import Gallery from '../components/Gallery.astro'
+import Footer from '../components/Footer.astro'
+
+const galleryImages = [
+  '/images/image1.jpg',
+  '/images/image2.jpg',
+  '/images/image3.jpg',
+  '/images/image4.jpg',
+  '/images/image5.jpg',
+  '/images/image6.jpg',
+  '/images/image7.jpg',
+  '/images/image8.jpg',
+  '/images/image9.jpg',
+  '/images/image10.jpg',
+  '/images/image11.jpg',
+  '/images/image12.jpg',
+  '/images/image13.jpg',
+  '/images/image14.jpg',
+  '/images/image15.jpg',
+]
+---
+
+<BaseLayout>
+
+  <Header siteTitle="House Page" />
+  <main>
+    <Hero title="House Page" subtitle="Escápate a la calma" image="/images/image1.jpg" />
+
+    <!-- Agrupamos las secciones en un track para que se muevan coordinadas con la cinta -->
+    <div class="sections-ribbon">
+      <div class="track-inner">
+        <SectionImageText title="..." text="..." image="/images/image2.jpg">
+          <p>...</p>
+        </SectionImageText>
+
+        <SectionImageText reverse title="..." text="..." image="/images/inside1.jpg">
+          <p>...</p>
+        </SectionImageText>
+        
+        <!-- duplicated so the track can loop seamlessly -->
+        <SectionImageText title="..." text="..." image="/images/hall2.jpg">
+          <p>...</p>
+        </SectionImageText>
+
+        <SectionImageText reverse title="..." text="..." image="/images/inside1.jpg">
+          <p>...</p>
+        </SectionImageText>
+      </div>
+    </div>
+
+      <!-- New map section below ribbon -->
+      <MapSection />
+
+  </main>
+
+  <Footer />
+</BaseLayout>

@@ -1,0 +1,48 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+const restaurants = [
+  { name: '...', score: 5, desc: '...' },
+  { name: '...', score: 5, desc: '...' },
+  { name: '...', score: 5, desc: '...' },
+  { name: "...", score: 5, desc: '...' },
+  { name: '...', score: 5, desc: '...' },
+  { name: '...', score: 5, desc: '...' },
+  { name: '...', score: 5, desc: '...' }
+];
+---
+          
+<BaseLayout>
+  <title slot="head">Restaurantes Cercanos — House Page</title>
+
+  <Header siteTitle="House Page" />
+  <main>
+      <section class="section">
+        <div class="container">
+          <h2 class="map-title">Restaurantes cercanos</h2>
+          <p class="text">Listado de restaurantes recomendados en las cercanías con breve descripción y puntaje.</p>          
+
+          <div class="restaurants-grid">
+            {restaurants.map((r, i) => (
+              <article class="restaurant-card" data-i={i}>
+                <div class="restaurant-card-inner">
+                  <h3 class="restaurant-title">{r.name}</h3>
+                  <div class="restaurant-meta">
+                    <div class="stars" style={`--pct:${(r.score/5*100).toFixed(2)}%`} aria-hidden="true">★★★★★</div>
+                    <div class="rating-number">{r.score.toFixed(1)}</div>
+                  </div>
+
+                  <p class="restaurant-desc">{r.desc}</p>
+                </div>
+              </article>
+            ))}
+          </div>
+
+        </div>
+      </section>
+  </main>
+
+  <Footer />
+</BaseLayout>

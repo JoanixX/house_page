@@ -1,0 +1,91 @@
+/* Section image + text layout */
+.section{padding:5rem 0}
+.section-image-text{padding:0}
+.section-image-text .container{
+	display:grid;
+	grid-template-columns:50vw 50vw;
+	gap:2.25rem;
+	align-items:start;
+	grid-auto-rows:auto;
+	max-width:none;
+	width:100vw;
+	padding:0;
+}
+.section-image-text .img{
+	width:100%;
+	height:100%;
+	min-height:560px;
+	background-size:cover;
+	background-position:center;
+	border-radius:12px;
+	overflow:hidden;
+	box-shadow:var(--shadow-subtle);
+	display:block;
+	position:relative;
+	z-index:1;
+	transition:none;
+}
+.section-image-text .img.enter{transform:none;opacity:1}
+.section-image-text .img:hover{transform:none}
+.section-image-text .copy{display:flex;flex-direction:column;justify-content:flex-start;align-items:stretch;padding:2rem}
+.section-image-text.reverse .container{grid-template-columns:1fr 1fr}
+.section-image-text .img{border-radius:0}
+
+/* Sections ribbon (looping track) used on home index to animate sections horizontally */
+.sections-ribbon{position:relative;overflow:hidden;padding:0;margin:0}
+.sections-ribbon .track-inner{
+	display:flex;
+	flex-direction:row;
+	gap:0;
+	/* ribbon animation duration controlled by --ribbon-duration (default 80s for a slower effect) */
+	--ribbon-duration: 80s;
+	animation: trackSlide var(--ribbon-duration) linear infinite;
+}
+
+.sections-ribbon .section-image-text{width:100vw;left:0;margin-left:0;margin-right:0}
+.sections-ribbon .section-image-text{flex:0 0 100vw}
+.sections-ribbon .section-image-text .container{width:100%;grid-template-columns:45vw 55vw !important}
+.sections-ribbon .section-image-text .container > .img{grid-column:1;grid-row:1;width:100%;height:100%}
+.sections-ribbon .section-image-text .container > .copy{grid-column:2;grid-row:1;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;height:100%;padding:2.5rem 3rem}
+
+.sections-ribbon .section-image-text.reverse .container{grid-template-columns:45vw 55vw !important}
+.sections-ribbon .section-image-text.reverse .container > .img{grid-column:1}
+.sections-ribbon .section-image-text.reverse .container > .copy{grid-column:2;display:flex;flex-direction:column;justify-content:center;align-items:flex-start;height:100%;padding:2.5rem 3rem}
+
+.sections-ribbon .section-image-text .copy h2{font-size:clamp(1.5rem,2.6vw,2.4rem)}
+.sections-ribbon .section-image-text .copy p{font-size:clamp(1.125rem,1.9vw,1.25rem);line-height:1.6}
+
+/* Tamaño fijo basado en la imagen más grande: todas las imágenes tienen la misma altura */
+.sections-ribbon .section-image-text .container > .img{height:560px;min-height:560px;max-height:560px}
+.sections-ribbon .section-image-text.reverse .container > .img{height:560px;min-height:560px;max-height:560px}
+
+/* Asegurar que el contenedor tenga la misma altura que las imágenes y alinear verticalmente */
+.sections-ribbon .section-image-text .container{align-items:stretch}
+.sections-ribbon .section-image-text .container > .copy{align-self:stretch}
+
+/* Mobile: tamaño fijo para pantallas pequeñas con separador */
+@media(max-width:768px){
+	.sections-ribbon .section-image-text .container{grid-template-columns:100vw 1fr !important}
+	.sections-ribbon .section-image-text .container > .img{grid-column:1;grid-row:1;width:100vw;height:320px;min-height:320px;max-height:320px;position:relative}
+	.sections-ribbon .section-image-text .container > .img::after{content:'';position:absolute;bottom:-1.5rem;left:0;right:0;height:1px;background:linear-gradient(90deg, transparent, rgba(34,34,42,0.15) 20%, rgba(34,34,42,0.15) 80%, transparent);box-shadow:0 2px 8px rgba(34,34,42,0.08)}
+	.sections-ribbon .section-image-text .container > .copy{grid-column:1;grid-row:2;padding-top:2.5rem}
+	.sections-ribbon .section-image-text.reverse .container{grid-template-columns:100vw 1fr !important}
+	.sections-ribbon .section-image-text.reverse .container > .img{grid-column:1;grid-row:1;width:100vw;height:320px;min-height:320px;max-height:320px;position:relative}
+	.sections-ribbon .section-image-text.reverse .container > .img::after{content:'';position:absolute;bottom:-1.5rem;left:0;right:0;height:1px;background:linear-gradient(90deg, transparent, rgba(34,34,42,0.15) 20%, rgba(34,34,42,0.15) 80%, transparent);box-shadow:0 2px 8px rgba(34,34,42,0.08)}
+	.sections-ribbon .section-image-text.reverse .container > .copy{grid-column:1;grid-row:2;padding-top:2.5rem}
+	.sections-ribbon .section-image-text .copy h2{font-size:clamp(1.5rem - 4px,2.6vw,2.4rem - 4px)}
+	.sections-ribbon .section-image-text .copy p{font-size:clamp(1.125rem - 3px,1.9vw,1.25rem - 3px)}
+}
+
+@keyframes trackSlide{
+	0% { transform: translateX(0); }
+	50% { transform: translateX(-200vw); }
+	100% { transform: translateX(0); }
+}
+
+@keyframes trackShift{
+	0% { transform: translateX(0); }
+	50% { transform: translateX(-6%); }
+	100% { transform: translateX(0); }
+}
+

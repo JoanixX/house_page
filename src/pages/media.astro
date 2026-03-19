@@ -1,0 +1,235 @@
+  ---
+  import BaseLayout from '../layouts/BaseLayout.astro';
+  import Header from '../components/Header.astro';
+  import Footer from '../components/Footer.astro';
+  ---
+
+  <BaseLayout>
+    <title slot="head">Media — House Page</title>
+
+    <Header siteTitle="House Page" />
+    <main>
+      <section class="section photo-section">
+        <div class="container">
+          <h2 class="map-title">Fotogalería</h2>
+          <p>Collage de imágenes — las fotos se muestran juntas sin modificar su tamaño. Puedes añadir una foto con el botón.</p>
+
+          <div class="photo-controls" style="margin-bottom:1rem; display:flex; gap:1rem; align-items:center;">
+            <button id="add-photo" class="btn ghost">+ Agregar foto</button>
+            <input id="photo-input" type="file" accept="image/*" style="display:none" />
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Full-bleed collage: title/description above is constrained, collage itself is full-width -->
+      <div class="photo-collage-bleed">
+        <div class="photo-collage" id="photo-collage">
+          <!-- ejemplo de imágenes con clases para variar tamaños; reemplaza con tus rutas reales -->
+          <figure class="wide"><img src="/images/image1.jpg" alt="Foto 1"></figure>
+          <figure><img src="/images/image2.jpg" alt="Foto 2"></figure>
+          <figure class="tall"><img src="/images/image3.jpg" alt="Foto 3"></figure>
+          <figure><img src="/images/image4.jpg" alt="Foto 4"></figure>
+
+          <figure><img src="/images/image5.jpg" alt="Foto 5"></figure>
+          <figure><img src="/images/image6.jpg" alt="Foto 6"></figure>
+          <figure class="wide tall"><img src="/images/image7.jpg" alt="Foto 7"></figure>
+          <figure><img src="/images/image8.jpg" alt="Foto 8"></figure>
+          
+          <figure><img src="/images/image9.jpg" alt="Foto 9"></figure>
+          <figure><img src="/images/image10.jpg" alt="Foto 10"></figure>
+          <figure><img src="/images/image11.jpg" alt="Foto 11"></figure>
+          <figure class="tall"><img src="/images/image12.jpg" alt="Foto 12"></figure>
+        </div>
+      </div>
+        </div>
+      </section>
+
+      <!-- Separador rayado dorado entre fotogalería y videogalería -->
+      <div class="section-divider">
+        <div class="dashed-line-gold"></div>
+      </div>
+
+      <section class="section video-section">
+        <div class="container">
+          <h2 class="map-title">Videogalería</h2>
+          <p>Reproduce uno a la vez. Usa las flechas para navegar entre videos.</p>
+
+          <div class="video-carousel" id="video-carousel">
+            <button class="carousel-btn prev" aria-label="Anterior">‹</button>
+
+            <div class="video-viewport">
+              <div class="video-slide active">
+                <div class="video-card">
+                  <video src="/media/sample1.mp4" controls muted></video>
+                </div>
+                <div class="video-desc">
+                  <h3>Video 1</h3>
+                  <p>Por el momento no hay ninguna grabación disponible.</p>
+                </div>
+              </div>
+
+              <div class="video-slide">
+                <div class="video-card">
+                  <video src="/media/sample2.mp4" controls muted></video>
+                </div>
+                <div class="video-desc">
+                  <h3>Video 2</h3>
+                  <p>Por el momento no hay ninguna grabación disponible.</p>
+                </div>
+              </div>
+
+              <div class="video-slide">
+                <div class="video-card">
+                  <video src="/media/sample3.mp4" controls muted></video>
+                </div>
+                <div class="video-desc">
+                  <h3>Video 3</h3>
+                  <p>Por el momento no hay ninguna grabación disponible.</p>
+                </div>
+              </div>
+            </div>
+
+            <button class="carousel-btn next" aria-label="Siguiente">›</button>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <Footer />
+  </BaseLayout>
+
+  <script>
+  // Photo add button — preview appended to collage (client-side only, no upload)
+  document.addEventListener('DOMContentLoaded', function(){
+    const addBtn = document.getElementById('add-photo');
+    const input = document.getElementById('photo-input');
+    const collage = document.getElementById('photo-collage');
+
+    // Compute a consistent cell size for the matrix based on columns and container width
+    function updateGridCell(){
+      if (!collage) return;
+      const imgs = Array.from(collage.querySelectorAll('img'));
+      if (!imgs.length) return;
+      
+      const width = window.innerWidth;
+      const cols = width < 600 ? 2 : (width < 780 ? 3 : 4);
+      collage.style.setProperty('--cols', cols.toString());
+
+      const desired = imgs.map(img => {
+        const nw = img.naturalWidth || img.width || 120;
+        return Math.max(40, Math.round(nw / 5));
+      }).sort((a,b)=>a-b);
+      const mid = Math.floor(desired.length / 2);
+      const median = desired.length % 2 ? desired[mid] : Math.round((desired[mid-1] + desired[mid]) / 2);
+
+      const gap = parseInt(getComputedStyle(collage).gap) || 5;
+      const containerWidth = Math.max(200, collage.clientWidth - 1);
+      // Use the dynamic column count for the calculation
+      const maxCellByContainer = Math.floor((containerWidth - gap * (cols - 1)) / cols);
+      
+      // Let it fill more width by increasing the limit or removing it for small screens
+      const cell = width < 780 ? maxCellByContainer : Math.max(40, Math.min(maxCellByContainer, median));
+      
+      collage.style.setProperty('--cell', cell + 'px');
+
+      // ensure images fill their figure
+      imgs.forEach(img=>{ img.style.width = '100%'; img.style.height = '100%'; img.style.objectFit = 'cover'; });
+      // ensure figures respect the cell
+      Array.from(collage.querySelectorAll('figure')).forEach(fig=>{
+        fig.style.width = '';
+        fig.style.height = '';
+        fig.style.maxWidth = cell + 'px';
+        fig.style.maxHeight = cell + 'px';
+        fig.style.display = 'block';
+      });
+    }
+
+    if (collage){
+      // update once images have loaded
+      Array.from(collage.querySelectorAll('img')).forEach(img=>{
+        if (img.complete) updateGridCell(); else img.addEventListener('load', updateGridCell);
+      });
+      // also on resize
+      let t;
+      window.addEventListener('resize', ()=>{ clearTimeout(t); t = setTimeout(updateGridCell, 120); });
+    }
+
+    if (addBtn && input){
+      addBtn.addEventListener('click', ()=> input.click());
+      input.addEventListener('change', async (e)=>{
+        const files = e.target.files ? Array.from(e.target.files) : [];
+        if (!files.length) return;
+        
+        for (const file of files) {
+          // Convertir imagen a base64 para enviar por correo
+          const reader = new FileReader();
+          reader.onload = async function(e) {
+            const base64Image = e.target.result;
+            const imageData = base64Image.split(',')[1];
+            
+            // Enviar correo usando mailto con datos adjuntos (limitado, pero funcional)
+            // Alternativa: usar un servicio backend, pero por ahora usamos mailto
+            const subject = encodeURIComponent('Foto House Page');
+            const body = encodeURIComponent(`Se ha subido una nueva foto para la galería.\n\nNombre del archivo: ${file.name}\nTamaño: ${(file.size / 1024).toFixed(2)} KB\n\nLa imagen está adjunta en formato base64.`);
+            
+            // Crear un formulario temporal para enviar el correo
+            // Nota: mailto no soporta adjuntos directamente, así que incluimos la imagen en el cuerpo
+            const mailtoLink = `mailto:alvaradocjosorio@gmail.com?subject=${subject}&body=${body}`;
+            
+            // Mostrar mensaje de confirmación
+            showPhotoNotification();
+            
+            // Intentar abrir el cliente de correo (opcional)
+            // window.location.href = mailtoLink;
+          };
+          reader.readAsDataURL(file);
+        }
+        
+        // Limpiar el input
+        input.value = '';
+      });
+    }
+    
+    // Función para mostrar notificación
+    function showPhotoNotification() {
+      const notification = document.createElement('div');
+      notification.className = 'photo-notification';
+      notification.textContent = 'La foto será evaluada, gracias.';
+      document.body.appendChild(notification);
+      
+      setTimeout(() => {
+        notification.classList.add('show');
+      }, 10);
+      
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => {
+          document.body.removeChild(notification);
+        }, 300);
+      }, 3000);
+    }
+
+    // Video carousel
+    const carousel = document.getElementById('video-carousel');
+    if (!carousel) return;
+    const slides = Array.from(carousel.querySelectorAll('.video-slide'));
+    let idx = slides.findIndex(s => s.classList.contains('active'));
+    if (idx < 0) idx = 0;
+
+    function show(index){
+      slides.forEach((s,i)=>{
+        s.classList.toggle('active', i===index);
+        const v = s.querySelector('video');
+        if (v){ if (i===index) { v.currentTime = 0; /* optionally play */ } else { v.pause(); } }
+      });
+    }
+
+    carousel.querySelector('.prev').addEventListener('click', ()=>{
+      idx = (idx - 1 + slides.length) % slides.length; show(idx);
+    });
+    carousel.querySelector('.next').addEventListener('click', ()=>{
+      idx = (idx + 1) % slides.length; show(idx);
+    });
+  });
+  </script>

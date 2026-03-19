@@ -1,0 +1,14 @@
+---
+const { title = '', text = '', image = '', reverse = false } = Astro.props;
+---
+
+<section class={`section section-image-text ${reverse ? 'reverse' : ''}`}>
+	<div class="container">
+		<div class="img hover-lift animate-on-scroll" data-i="0" style={`background-image: url('${image || '/images/placeholder.jpg'}')`}></div>
+		<div class="copy animate-on-scroll" data-i="1">
+			<h2 class="reveal" style="--delay:0.08s">{title}</h2>
+			<p class="reveal" style="--delay:0.18s">{text}</p>
+			<slot />
+		</div>
+	</div>
+</section>
